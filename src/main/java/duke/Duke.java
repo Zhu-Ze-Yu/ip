@@ -1,3 +1,12 @@
+package duke;
+
+import duke.exception.DoNotHaveException;
+import duke.exception.DukeException;
+import duke.task.Deadline;
+import duke.task.Event;
+import duke.task.Task;
+import duke.task.Todo;
+
 import java.util.Scanner;
 
 public class Duke {
@@ -60,10 +69,10 @@ public class Duke {
         System.out.println("-");
     }
 
-    // greet word for Duke
+    // greet word for duke.Duke
     public static void greetWords() {
         printLine();
-        System.out.println("     Hello! I'm Duke");
+        System.out.println("     Hello! I'm duke.Duke");
         System.out.println("     What can I do for you?");
         printLine();
     }
