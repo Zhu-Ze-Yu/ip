@@ -12,7 +12,6 @@ import java.util.Scanner;
 public class Duke {
 
     public static final int MAX_TASK = 100;                 // maximum amount of task input
-
     public static final int TODO_CMD_LEN = 5;               // length of "todo"
     public static final int DEADLINE_CMD_LEN = 9;           // length of "deadline"
     public static final int EVENT_CMD_LEN = 6;              // length of "event"
@@ -41,6 +40,7 @@ public class Duke {
         printLine();
     }//end main
 
+
     // different commands user give
     private static int Commands(Task[] tasks, int countTask, String words) throws DukeException {
         if (words.equals("list")) {
@@ -60,7 +60,6 @@ public class Duke {
         }
         return countTask;
     }
-
 
     // print the horizontal line
     public static void printLine() {
