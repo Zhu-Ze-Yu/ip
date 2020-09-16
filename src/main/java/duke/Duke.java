@@ -21,7 +21,7 @@ public class Duke {
     public static final int DELETE_CMD_LEN = 7;             // length of "delete"
     public static final int DONE_CMD_LEN = 5;               // length of "done"
 
-    public static final String FILE_PATHWAY = "/Users/zhuzeyu/Desktop/data/task.txt";   // file pathway
+    public static final String FILE_PATHWAY = "/Users/zhuzeyu/Desktop/data/taask.txt";   // file pathway
 
     public static void main(String[] args) {
         greetWords();
@@ -31,7 +31,8 @@ public class Duke {
         try {
             getFileContents(FILE_PATHWAY, tasks, texts);
         } catch (FileNotFoundException e) {
-            System.out.println("File not found");
+            System.out.println("     File not found");
+            printLine();
         }
         String words = " ";
         while(!words.equals("bye")) {
