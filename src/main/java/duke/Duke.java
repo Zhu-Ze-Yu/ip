@@ -20,8 +20,7 @@ public class Duke {
     public static final int EVENT_CMD_LEN = 6;              // length of "event"
     public static final int DELETE_CMD_LEN = 7;             // length of "delete"
     public static final int DONE_CMD_LEN = 5;               // length of "done"
-
-    public static final String FILE_PATHWAY = "/Users/zhuzeyu/Desktop/data/taask.txt";   // file pathway
+    public static final String FILE_PATHWAY = "/Users/zhuzeyu/Desktop/data/task.txt";   // file pathway
 
     public static void main(String[] args) {
         greetWords();
@@ -34,6 +33,7 @@ public class Duke {
             System.out.println("     File not found");
             printLine();
         }
+
         String words = " ";
         while(!words.equals("bye")) {
             Scanner in = new Scanner(System.in);
@@ -53,7 +53,6 @@ public class Duke {
         System.out.println("     Bye. Hope to see you again soon!");
         printLine();
     }//end main
-
 
     // different commands user give
     private static void Commands(ArrayList<Task> tasks, ArrayList<String> texts, String words) throws DukeException {
@@ -176,7 +175,6 @@ public class Duke {
         try {
             String taskIndex = words.substring(DONE_CMD_LEN);
             int index = Integer.parseInt(taskIndex);
-
             //mark as done
             System.out.println("     Nice! I've marked this task as done:");
             Task task = tasks.get(index-1);
