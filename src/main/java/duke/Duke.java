@@ -1,6 +1,5 @@
 package duke;
 
-import duke.exception.DoNotHaveException;
 import duke.exception.DukeException;
 import duke.task.Deadline;
 import duke.task.Event;
@@ -8,21 +7,32 @@ import duke.task.Task;
 import duke.task.Todo;
 
 import java.util.Scanner;
+import java.util.ArrayList;
+import java.io.File;
+import java.io.FileNotFoundException;
 
 public class Duke {
 
-    public static final int MAX_TASK = 100;                 // maximum amount of task input
     public static final int TODO_CMD_LEN = 5;               // length of "todo"
     public static final int DEADLINE_CMD_LEN = 9;           // length of "deadline"
     public static final int EVENT_CMD_LEN = 6;              // length of "event"
-    public static final int REMOVE_CMD_LEN = 7;             // length of "remove"
+    public static final int DELETE_CMD_LEN = 7;             // length of "delete"
     public static final int DONE_CMD_LEN = 5;               // length of "done"
+    public static final int ONE_TO_TWO = 2;                 // split one string to two words
+    public static final int ONE_TO_FOUR = 3;                // split one string to four words
+
+    public static final String FILE_PATHWAY = "data/task.txt";   // file pathway
 
     public static void main(String[] args) {
         greetWords();
+        ArrayList<Task> tasks = new ArrayList<>();      // store tasks the user is adding
+        ArrayList<String> texts = new ArrayList<>();    // store text format of each task
 
-        Task[] tasks = new Task[MAX_TASK];
-        int countTask = 0;
+        try {
+            getFileContents(FILE_PATHWAY, tasks, texts);
+        } catch (FileNotFoundException e) {
+            System.out.println("File not found");
+        }
         String words = " ";
         while(!words.equals("bye")) {
             Scanner in = new Scanner(System.in);
@@ -30,7 +40,7 @@ public class Duke {
             words = words.trim();
             printLine();
             try {
-                countTask = Commands(tasks, countTask, words);
+                Commands(tasks, texts, words);
             } catch (DukeException e) {
                 System.out.println("     ☹ OOPS!!! I'm sorry, but I don't know what that means :-(");
             }
@@ -42,23 +52,22 @@ public class Duke {
 
 
     // different commands user give
-    private static int Commands(Task[] tasks, int countTask, String words) throws DukeException {
+    private static void Commands(ArrayList<Task> tasks, ArrayList<String> texts, String words) throws DukeException {
         if (words.equals("list")) {
-            listTasks(tasks, countTask);
+            listTasks(tasks);
         } else if (words.startsWith("todo")) {
-            countTask = addTodo(tasks, countTask, words);
+            addTodo(tasks, texts, words);
         } else if (words.startsWith("deadline")) {
-            countTask = addDeadline(tasks, countTask, words);
+            addDeadline(tasks, texts, words);
         } else if (words.startsWith("event")) {
-            countTask = addEvent(tasks, countTask, words);
-        } else if (words.startsWith("remove")) {
-            countTask = removeTask(tasks, countTask, words);
+            addEvent(tasks, texts, words);
+        } else if (words.startsWith("delete")) {
+            removeTask(tasks, texts, words);
         } else if (words.startsWith("done")) {
-            doTask(tasks, words);
+            doTask(tasks, texts, words);
         } else if (!words.equals("bye")){
             throw new DukeException();
         }
-        return countTask;
     }
 
     // print the horizontal line
@@ -77,105 +86,106 @@ public class Duke {
     }
 
     // method to list the task
-    public static void listTasks(Task[] tasks,int countTask) {
-        if(countTask == 0) {
+    public static void listTasks(ArrayList<Task> tasks) {
+        if(tasks.size() == 0) {
             System.out.println("     You have not added any task into your list.");
         } else {
             System.out.println("     Here are the tasks in your list:");
-            int taskIndex = 1;
-            for (int i = 0; i < countTask; i++) {
-                System.out.print("\n     " + taskIndex + ".");
-                System.out.println(tasks[i].toString());
-                taskIndex++;
+            for (int i = 1; i <= tasks.size(); i++) {
+                System.out.print("\n     " + i + ".");
+                System.out.println(tasks.get(i-1).toString());
             }
         }
     }
 
     // print the add task message
-    public static void addTask(Task t, int count) {
+    public static void addTask(Task t, int amount) {
         System.out.println("     Got it. I've added this task:");
         System.out.println("       " + t.toString());
-        count++;
-        System.out.println("     Now you have " +  count + " tasks in the list.");
+        System.out.println("     Now you have " +  amount + " tasks in the list.");
     }
 
     // method to add todo task
-    private static int addTodo(Task[] tasks, int countTask, String words) {
+    private static void addTodo(ArrayList<Task> tasks, ArrayList<String> texts, String words) {
         try {
-            tasks[countTask] = new Todo(words.substring(TODO_CMD_LEN));
-            addTask(tasks[countTask], countTask);
-            countTask++;
+            String name = words.substring(TODO_CMD_LEN);
+            Task task = new Todo(name);
+            tasks.add(task);
+            texts.add("D | 0 | " + task.description);
+            addTask(task, tasks.size());
         } catch (IndexOutOfBoundsException e) {
             System.out.println("     ☹ OOPS!!! The description of a todo cannot be empty.");
         }
-        return countTask;
+    }
+
+    // split the given string words
+    private static String[] getStrings(String words, String s, int i) {
+        String[] detail = words.split(s,i);
+        for(int j=0; j<i; j++) {
+            detail[j] = detail[j].trim();
+        }
+        return detail;
     }
 
     // method to add deadline task
-    private static int addDeadline(Task[] tasks, int countTask, String words) {
+    private static void addDeadline(ArrayList<Task> tasks, ArrayList<String> texts, String words) {
         try {
-            String[] detail = words.split("/by");
-            detail[0] = detail[0].trim();
-            detail[1] = detail[1].trim();
-            tasks[countTask] = new Deadline(detail[0].substring(DEADLINE_CMD_LEN),detail[1]);
-            addTask(tasks[countTask], countTask);
-            countTask++;
+            String[] detail = getStrings(words, "/by", ONE_TO_TWO);
+            Task task = new Deadline(detail[0].substring(DEADLINE_CMD_LEN),detail[1]);
+            tasks.add(task);
+            texts.add("D | 0 | " + task.description + " | " + detail[1]);
+            addTask(task, tasks.size());
         } catch (IndexOutOfBoundsException e) {
             System.out.println("     ☹ OOPS!!! The description of a task with deadline cannot be empty.");
         }
-        return countTask;
     }
 
     // method to add event task
-    private static int addEvent(Task[] tasks, int countTask, String words) {
+    private static void addEvent(ArrayList<Task> tasks, ArrayList<String> texts, String words) {
         try {
-            String[] detail = words.split("/at");
-            detail[0] = detail[0].trim();
-            detail[1] = detail[1].trim();
-            tasks[countTask] = new Event(detail[0].substring(EVENT_CMD_LEN), detail[1]);
-            addTask(tasks[countTask], countTask);
-            countTask++;
+            String[] detail = getStrings(words, "/at", ONE_TO_TWO);
+            Task task = new Event(detail[0].substring(EVENT_CMD_LEN), detail[1]);
+            tasks.add(task);
+            texts.add("E | 0 | " + task.description + " | " + detail[1]);
+            addTask(task, tasks.size());
         } catch (IndexOutOfBoundsException e) {
             System.out.println("     ☹ OOPS!!! The description of a event cannot be empty.");
         }
-        return countTask;
     }
 
     // remove the task the user don't want to keep
-    private static int removeTask(Task[] tasks, int countTask, String words) {
+    private static void removeTask(ArrayList<Task> tasks, ArrayList<String> texts, String words) {
         try {
-            String task = words.substring(REMOVE_CMD_LEN);
-            int totalNum = countTask;
-            for (int i = 0; i < countTask; i++) {
-                String t = tasks[i].description;
-                if(t.equals(task)) {
-                    System.out.println("     I've removed this task:");
-                    System.out.println("       " + tasks[i]);
-                    tasks[i] = tasks[countTask -1];
-                    tasks[countTask -1] = null;
-                    countTask--;
-                    System.out.println("     Now you have " + countTask + " tasks in the list.");
-                    break;
-                }
-            }
-            if (totalNum == countTask) {
-                throw new DoNotHaveException();
-            }
+            String taskIndex = words.substring(DELETE_CMD_LEN);
+            int index = Integer.parseInt(taskIndex);
+            //delete the task
+            System.out.println("     Noted. I've removed this task:");
+            Task t = tasks.get(index-1);
+            System.out.println("       " + t.toString());
+            tasks.remove(index-1);
+            texts.remove(index-1);
+            System.out.println("     Now you have " + tasks.size() + " tasks in the list.");
         } catch (IndexOutOfBoundsException e) {
             System.out.println("     Sorry, I don't know which task you want to remove.");
-        } catch (DoNotHaveException e) {
-            System.out.println("     I can't find this task in your list.");
+        } catch (NumberFormatException e) {
+            System.out.println("     Sorry, there must a number after \"delete\".");
         }
-        return countTask;
     }
 
     // do the task and mark it as done
-    private static void doTask(Task[] tasks, String words) {
+    private static void doTask(ArrayList<Task> tasks, ArrayList<String> texts, String words) {
         try {
             String taskIndex = words.substring(DONE_CMD_LEN);
             int index = Integer.parseInt(taskIndex);
+
             //mark as done
-            finishTask(tasks[index - 1]);
+            System.out.println("     Nice! I've marked this task as done:");
+            Task task = tasks.get(index-1);
+            task.markAsDone();
+            String text = texts.get(index-1);
+            text = text.substring(0,4) + "1" + text.substring(5);
+            texts.set(index-1, text);
+            System.out.println("       " + task.toString());
         } catch (IndexOutOfBoundsException e) {
             System.out.println("     Sorry, I don't know which task you have finished.");
         } catch (NumberFormatException e) {
@@ -183,11 +193,36 @@ public class Duke {
         }
     }
 
-    // print finish task message
-    public static void finishTask(Task t) {
-        System.out.println("     Nice! I've marked this task as done:");
-        t.markAsDone();
-        System.out.print("       ");
-        System.out.println(t.toString());
+    private static void getFileContents(String filePath, ArrayList<Task> tasks, ArrayList<String> texts) throws FileNotFoundException {
+        File f = new File(filePath); // create a File for the given file path
+        Scanner s = new Scanner(f); // create a Scanner using the File as the source
+        while (s.hasNext()) {
+            String words = s.nextLine();
+            texts.add(words);
+            String[] detail = getStrings(words, "|", ONE_TO_FOUR);
+            boolean done = false;
+            if (detail[1].equals("1")) {
+                done = true;
+            }
+            switch(detail[0]) {
+                case "T":
+                    Task t = new Todo(detail[2]);
+                    t.isDone = done;
+                    tasks.add(t);
+                    break;
+                case "D":
+                    Task d = new Deadline(detail[2], detail[3]);
+                    d.isDone = done;
+                    tasks.add(d);
+                    break;
+                case "E":
+                    Task e = new Event(detail[2], detail[3]);
+                    e.isDone = done;
+                    tasks.add(e);
+                    break;
+                default:
+                    //throw new InvalidFileException();
+            }
+        }
     }
 }
