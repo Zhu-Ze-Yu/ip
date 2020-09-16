@@ -10,6 +10,8 @@ import java.util.Scanner;
 import java.util.ArrayList;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
 
 public class Duke {
 
@@ -18,10 +20,8 @@ public class Duke {
     public static final int EVENT_CMD_LEN = 6;              // length of "event"
     public static final int DELETE_CMD_LEN = 7;             // length of "delete"
     public static final int DONE_CMD_LEN = 5;               // length of "done"
-    public static final int ONE_TO_TWO = 2;                 // split one string to two words
-    public static final int ONE_TO_FOUR = 3;                // split one string to four words
 
-    public static final String FILE_PATHWAY = "data/task.txt";   // file pathway
+    public static final String FILE_PATHWAY = "/Users/zhuzeyu/Desktop/data/task.txt";   // file pathway
 
     public static void main(String[] args) {
         greetWords();
@@ -41,8 +41,11 @@ public class Duke {
             printLine();
             try {
                 Commands(tasks, texts, words);
+                writeToFile(FILE_PATHWAY,texts);
             } catch (DukeException e) {
                 System.out.println("     ☹ OOPS!!! I'm sorry, but I don't know what that means :-(");
+            } catch (IOException e) {
+                System.out.println("Something went wrong: " + e.getMessage());
             }
             printLine();
         }
@@ -111,29 +114,22 @@ public class Duke {
             String name = words.substring(TODO_CMD_LEN);
             Task task = new Todo(name);
             tasks.add(task);
-            texts.add("D | 0 | " + task.description);
+            texts.add("T - 0 - " + task.description);
             addTask(task, tasks.size());
         } catch (IndexOutOfBoundsException e) {
             System.out.println("     ☹ OOPS!!! The description of a todo cannot be empty.");
         }
     }
 
-    // split the given string words
-    private static String[] getStrings(String words, String s, int i) {
-        String[] detail = words.split(s,i);
-        for(int j=0; j<i; j++) {
-            detail[j] = detail[j].trim();
-        }
-        return detail;
-    }
-
     // method to add deadline task
     private static void addDeadline(ArrayList<Task> tasks, ArrayList<String> texts, String words) {
         try {
-            String[] detail = getStrings(words, "/by", ONE_TO_TWO);
+            String[] detail = words.split("/by");
+            detail[0] = detail[0].trim();
+            detail[1] = detail[1].trim();
             Task task = new Deadline(detail[0].substring(DEADLINE_CMD_LEN),detail[1]);
             tasks.add(task);
-            texts.add("D | 0 | " + task.description + " | " + detail[1]);
+            texts.add("D - 0 - " + task.description + " - " + detail[1]);
             addTask(task, tasks.size());
         } catch (IndexOutOfBoundsException e) {
             System.out.println("     ☹ OOPS!!! The description of a task with deadline cannot be empty.");
@@ -143,10 +139,12 @@ public class Duke {
     // method to add event task
     private static void addEvent(ArrayList<Task> tasks, ArrayList<String> texts, String words) {
         try {
-            String[] detail = getStrings(words, "/at", ONE_TO_TWO);
+            String[] detail = words.split("/at");
+            detail[0] = detail[0].trim();
+            detail[1] = detail[1].trim();
             Task task = new Event(detail[0].substring(EVENT_CMD_LEN), detail[1]);
             tasks.add(task);
-            texts.add("E | 0 | " + task.description + " | " + detail[1]);
+            texts.add("E - 0 - " + task.description + " - " + detail[1]);
             addTask(task, tasks.size());
         } catch (IndexOutOfBoundsException e) {
             System.out.println("     ☹ OOPS!!! The description of a event cannot be empty.");
@@ -199,7 +197,8 @@ public class Duke {
         while (s.hasNext()) {
             String words = s.nextLine();
             texts.add(words);
-            String[] detail = getStrings(words, "|", ONE_TO_FOUR);
+            String[] detail = words.split(" - ", 4);
+
             boolean done = false;
             if (detail[1].equals("1")) {
                 done = true;
@@ -221,8 +220,16 @@ public class Duke {
                     tasks.add(e);
                     break;
                 default:
-                    //throw new InvalidFileException();
+                    break;
             }
         }
+    }
+
+    private static void writeToFile(String filePath, ArrayList<String> texts) throws IOException {
+        FileWriter fw = new FileWriter(filePath);
+        for (String text : texts) {
+            fw.write(text + "\n");
+        }
+        fw.close();
     }
 }
