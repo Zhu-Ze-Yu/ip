@@ -1,7 +1,7 @@
 package duke.task;
 
 public class Deadline extends Task {
-    protected String by;
+    public String by;
     protected char type;
 
     public Deadline(String description, String by) {
