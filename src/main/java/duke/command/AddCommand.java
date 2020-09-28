@@ -6,6 +6,7 @@ import duke.task.Event;
 import duke.task.Task;
 import duke.task.Todo;
 
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 
 public class AddCommand {
@@ -38,6 +39,8 @@ public class AddCommand {
             addTask(task, tasks.size());
         } catch (IndexOutOfBoundsException e) {
             System.out.println("     ☹ OOPS!!! The description of a task with deadline cannot be empty.");
+        } catch (DateTimeParseException e) {
+            System.out.println("     ☹ OOPS!!! The date need to be in the format of yyyy-mm-dd.");
         }
     }
 
@@ -50,6 +53,9 @@ public class AddCommand {
             addTask(task, tasks.size());
         } catch (IndexOutOfBoundsException e) {
             System.out.println("     ☹ OOPS!!! The description of a event cannot be empty.");
+        } catch (DateTimeParseException e) {
+            System.out.println("     ☹ OOPS!!! The date need to be in the format of yyyy-mm-dd.");
         }
     }
 }
+

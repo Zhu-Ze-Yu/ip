@@ -7,6 +7,7 @@ import duke.task.Todo;
 
 import java.io.FileWriter;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -33,12 +34,14 @@ public class File {
                     tasks.add(t);
                     break;
                 case "D":
-                    Task d = new Deadline(detail[2], detail[3]);
+                    LocalDate deadline = LocalDate.parse(detail[3]);
+                    Task d = new Deadline(detail[2], deadline);
                     d.isDone = done;
                     tasks.add(d);
                     break;
                 case "E":
-                    Task e = new Event(detail[2], detail[3]);
+                    LocalDate event = LocalDate.parse(detail[3]);
+                    Task e = new Event(detail[2], event);
                     e.isDone = done;
                     tasks.add(e);
                     break;

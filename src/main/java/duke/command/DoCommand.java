@@ -5,8 +5,9 @@ import duke.task.Task;
 
 import java.util.ArrayList;
 
-public class DoCommand {// do the task and mark it as done
+public class DoCommand {
 
+    // do the task and mark it as done
     public static void doTask(ArrayList<Task> tasks, ArrayList<String> texts, String words) {
         try {
             String taskIndex = words.substring(Duke.DONE_CMD_LEN);

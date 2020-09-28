@@ -1,12 +1,10 @@
 package duke;
 
-import duke.command.AddCommand;
-import duke.command.DeleteCommand;
-import duke.command.DoCommand;
-import duke.command.ListCommand;
+import duke.command.*;
 import duke.exception.DukeException;
 import duke.task.Task;
 
+import java.time.format.DateTimeParseException;
 import java.util.Scanner;
 import java.util.ArrayList;
 import java.io.FileNotFoundException;
@@ -14,11 +12,11 @@ import java.io.IOException;
 
 public class Duke {
 
-    public static final int TODO_CMD_LEN = 5;               // length of "todo"
-    public static final int DEADLINE_CMD_LEN = 9;           // length of "deadline"
-    public static final int EVENT_CMD_LEN = 6;              // length of "event"
-    public static final int DELETE_CMD_LEN = 7;             // length of "delete"
-    public static final int DONE_CMD_LEN = 5;               // length of "done"
+    public static final int TODO_CMD_LEN = 5;               // length of "todo "
+    public static final int DEADLINE_CMD_LEN = 9;           // length of "deadline "
+    public static final int EVENT_CMD_LEN = 6;              // length of "event "
+    public static final int DELETE_CMD_LEN = 7;             // length of "delete "
+    public static final int DONE_CMD_LEN = 5;               // length of "done "
 
     public static void main(String[] args) {
         Ui.greetWords();
@@ -29,6 +27,9 @@ public class Duke {
             File.getFileContents(File.FILE_PATHWAY, tasks, texts);
         } catch (FileNotFoundException e) {
             System.out.println("     File not found");
+            Ui.printLine();
+        } catch (DateTimeParseException e) {
+            System.out.println("     ☹ OOPS!!! The date in the file need to be in the format of yyyy-mm-dd.");
             Ui.printLine();
         }
 
@@ -44,7 +45,7 @@ public class Duke {
             } catch (DukeException e) {
                 System.out.println("     ☹ OOPS!!! I'm sorry, but I don't know what that means :-(");
             } catch (IOException e) {
-                System.out.println("Something went wrong: " + e.getMessage());
+                System.out.println("     Something went wrong: " + e.getMessage());
             }
             Ui.printLine();
         }
@@ -66,6 +67,8 @@ public class Duke {
             DeleteCommand.removeTask(tasks, texts, words);
         } else if (words.startsWith("done")) {
             DoCommand.doTask(tasks, texts, words);
+        } else if (words.startsWith("find")) {
+            FindCommand.findName(tasks, words);
         } else if (!words.equals("bye")){
             throw new DukeException();
         }
