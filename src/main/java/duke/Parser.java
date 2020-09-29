@@ -3,6 +3,7 @@ package duke;
 import duke.task.Deadline;
 import duke.task.Event;
 import duke.task.Todo;
+import java.time.LocalDate;
 
 public class Parser {
 
@@ -16,7 +17,8 @@ public class Parser {
         String[] detail = words.split("/by");
         detail[0] = detail[0].trim();
         detail[1] = detail[1].trim();
-        Deadline task = new Deadline(detail[0].substring(Duke.DEADLINE_CMD_LEN), detail[1]);
+        LocalDate date = LocalDate.parse(detail[1]);
+        Deadline task = new Deadline(detail[0].substring(Duke.DEADLINE_CMD_LEN), date);
         return task;
     }
 
@@ -24,7 +26,8 @@ public class Parser {
         String[] detail = words.split("/at");
         detail[0] = detail[0].trim();
         detail[1] = detail[1].trim();
-        Event task = new Event(detail[0].substring(Duke.EVENT_CMD_LEN), detail[1]);
+        LocalDate date = LocalDate.parse(detail[1]);
+        Event task = new Event(detail[0].substring(Duke.EVENT_CMD_LEN), date);
         return task;
     }
 }

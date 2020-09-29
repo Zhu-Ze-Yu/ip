@@ -7,6 +7,7 @@ import duke.command.ListCommand;
 import duke.exception.DukeException;
 import duke.task.Task;
 
+import java.time.format.DateTimeParseException;
 import java.util.Scanner;
 import java.util.ArrayList;
 import java.io.FileNotFoundException;
@@ -29,6 +30,9 @@ public class Duke {
             File.getFileContents(File.FILE_PATHWAY, tasks, texts);
         } catch (FileNotFoundException e) {
             System.out.println("     File not found");
+            Ui.printLine();
+        } catch (DateTimeParseException e) {
+            System.out.println("     ☹ OOPS!!! The date need to be in the format of yyyy-mm-dd.");
             Ui.printLine();
         }
 
