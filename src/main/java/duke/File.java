@@ -22,6 +22,7 @@ public class File {
             String words = s.nextLine();
             texts.add(words);
             String[] detail = words.split(" - ", 4);
+            LocalDate date = LocalDate.parse(detail[3]);
 
             boolean done = false;
             if (detail[1].equals("1")) {
