@@ -1,19 +1,34 @@
-package duke;
+package duke.storage;
 
 import duke.task.Deadline;
 import duke.task.Event;
 import duke.task.Task;
 import duke.task.Todo;
-
 import java.io.FileWriter;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+/**
+ * File program deals with loading tasks from the file and saving tasks in the file
+ *
+ * @author  Zhu Zeyu
+ * @version 1.0
+ * @since   2020-08-21
+ */
 public class File {
 
     public static final String FILE_PATHWAY = "/Users/zhuzeyu/Desktop/data/task.txt";   // file pathway
 
+    /**
+     * This method gets tasks from the file and stores in the list
+     *
+     * @param filePath  the path way for the file
+     * @param tasks  ArrayList of tasks
+     * @param texts  ArrayList of tasks in the TXT format
+     * @return Nothing
+     */
     public static void getFileContents(java.lang.String filePath, java.util.ArrayList<duke.task.Task> tasks, java.util.ArrayList<java.lang.String> texts) throws java.io.FileNotFoundException {
         java.io.File f = new java.io.File(filePath); // create a File for the given file path
         Scanner s = new Scanner(f); // create a Scanner using the File as the source
@@ -21,6 +36,7 @@ public class File {
             String words = s.nextLine();
             texts.add(words);
             String[] detail = words.split(" - ", 4);
+            LocalDate date = LocalDate.parse(detail[3]);
 
             boolean done = false;
             if (detail[1].equals("1")) {
@@ -33,12 +49,12 @@ public class File {
                     tasks.add(t);
                     break;
                 case "D":
-                    Task d = new Deadline(detail[2], detail[3]);
+                    Task d = new Deadline(detail[2], date);
                     d.isDone = done;
                     tasks.add(d);
                     break;
                 case "E":
-                    Task e = new Event(detail[2], detail[3]);
+                    Task e = new Event(detail[2], date);
                     e.isDone = done;
                     tasks.add(e);
                     break;
@@ -49,6 +65,13 @@ public class File {
 
     }
 
+    /**
+     * This method overwrites the file using the text list
+     *
+     * @param filePath  the path way for the file
+     * @param texts  ArrayList of tasks in the TXT format
+     * @return Nothing
+     */
     public static void writeToFile(String filePath, ArrayList<String> texts) throws IOException {
         FileWriter fw = new FileWriter(filePath);
         for (String text : texts) {

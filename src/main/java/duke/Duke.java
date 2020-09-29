@@ -1,25 +1,45 @@
 package duke;
 
-import duke.command.AddCommand;
-import duke.command.DeleteCommand;
-import duke.command.DoCommand;
-import duke.command.ListCommand;
+import duke.command.*;
 import duke.exception.DukeException;
+import duke.storage.File;
 import duke.task.Task;
-
+import duke.ui.Ui;
+import java.time.format.DateTimeParseException;
 import java.util.Scanner;
 import java.util.ArrayList;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
+/**
+ * Duke program stores Todo Deadline and Event three types of tasks
+ * Add new tasks
+ * Delete tasks
+ * Do tasks
+ * Find tasks with keyword
+ * List tasks in the list
+ * Taskslist is used for storing tasks inside program e.g., <code>[T][✓] a</code>
+ * Textlist is used for storing tasks inside TXT file e.g., <code>T - 1 - a</code>
+ *
+ * @author  Zhu Zeyu
+ * @version 1.0
+ * @since   2020-08-21
+ */
 public class Duke {
 
-    public static final int TODO_CMD_LEN = 5;               // length of "todo"
-    public static final int DEADLINE_CMD_LEN = 9;           // length of "deadline"
-    public static final int EVENT_CMD_LEN = 6;              // length of "event"
-    public static final int DELETE_CMD_LEN = 7;             // length of "delete"
-    public static final int DONE_CMD_LEN = 5;               // length of "done"
+    public static final int TODO_CMD_LEN = 5;               // length of "todo "
+    public static final int DEADLINE_CMD_LEN = 9;           // length of "deadline "
+    public static final int EVENT_CMD_LEN = 6;              // length of "event "
+    public static final int DELETE_CMD_LEN = 7;             // length of "delete "
+    public static final int DONE_CMD_LEN = 5;               // length of "done "
 
+    /**
+     * This method makes use of getFileContents to load tasks from the file
+     * and saving tasks in the file by using writeToFile method
+     * Run the whole program by using Commands method
+     *
+     * @return Nothing
+     */
     public static void main(String[] args) {
         Ui.greetWords();
         ArrayList<Task> tasks = new ArrayList<>();      // store tasks the user is adding
@@ -29,6 +49,9 @@ public class Duke {
             File.getFileContents(File.FILE_PATHWAY, tasks, texts);
         } catch (FileNotFoundException e) {
             System.out.println("     File not found");
+            Ui.printLine();
+        } catch (DateTimeParseException e) {
+            System.out.println("     ☹ OOPS!!! The date in the file need to be in the format of yyyy-mm-dd.");
             Ui.printLine();
         }
 
@@ -44,7 +67,7 @@ public class Duke {
             } catch (DukeException e) {
                 System.out.println("     ☹ OOPS!!! I'm sorry, but I don't know what that means :-(");
             } catch (IOException e) {
-                System.out.println("Something went wrong: " + e.getMessage());
+                System.out.println("     Something went wrong: " + e.getMessage());
             }
             Ui.printLine();
         }
@@ -52,7 +75,14 @@ public class Duke {
         Ui.printLine();
     }//end main
 
-    // different commands user give
+    /**
+     * This method distinguishes different kinds of command user typed in
+     *
+     * @param tasks  ArrayList of tasks
+     * @param texts  ArrayList of tasks in the TXT format
+     * @param words  Words the user typed in
+     * @return Nothing
+     */
     public static void Commands(ArrayList<Task> tasks, ArrayList<String> texts, String words) throws DukeException {
         if (words.equals("list")) {
             ListCommand.listTasks(tasks);
@@ -66,6 +96,8 @@ public class Duke {
             DeleteCommand.removeTask(tasks, texts, words);
         } else if (words.startsWith("done")) {
             DoCommand.doTask(tasks, texts, words);
+        } else if (words.startsWith("find")) {
+            FindCommand.findName(tasks, words);
         } else if (!words.equals("bye")){
             throw new DukeException();
         }

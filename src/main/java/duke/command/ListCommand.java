@@ -1,12 +1,23 @@
 package duke.command;
 
 import duke.task.Task;
-
 import java.util.ArrayList;
 
+/**
+ * ListCommand program lists all the tasks in the list
+ *
+ * @author  Zhu Zeyu
+ * @version 1.0
+ * @since   2020-08-21
+ */
 public class ListCommand {
 
-    // method to list the task
+    /**
+     * This method prints all tasks in the list
+     *
+     * @param tasks  ArrayList of tasks
+     * @return Nothing
+     */
     public static void listTasks(ArrayList<Task> tasks) {
         if (tasks.size() == 0) {
             System.out.println("     You have not added any task into your list.");
