@@ -16,7 +16,7 @@ public class Ui {
      */
     public static void printLine() {
         System.out.print("     -");
-        for (int i = 0; i < 60; i++) System.out.print('-');
+        for (int i = 0; i < 100; i++) System.out.print('-');
         System.out.println("-");
     }
 
@@ -27,8 +27,18 @@ public class Ui {
      */
     public static void greetWords() {
         printLine();
-        System.out.println("     Hello! I'm duke.Duke");
+        System.out.println("     Hello! I'm Duke");
         System.out.println("     What can I do for you?");
+        System.out.println("     You can ask me to print the help list by saying help");
         printLine();
+    }
+
+    /**
+     * This method prints the exit message
+     *
+     * @return Nothing
+     */
+    public static void exitMessage() {
+        System.out.println("     Bye. Hope to see you again soon!");
     }
 }

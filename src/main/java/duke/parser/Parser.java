@@ -1,6 +1,5 @@
 package duke.parser;
 
-import duke.Duke;
 import duke.task.Deadline;
 import duke.task.Event;
 import duke.task.Todo;
@@ -15,6 +14,10 @@ import java.time.LocalDate;
  */
 public class Parser {
 
+    public static final int TODO_CMD_LEN = 5;               // length of "todo "
+    public static final int DEADLINE_CMD_LEN = 9;           // length of "deadline "
+    public static final int EVENT_CMD_LEN = 6;              // length of "event "
+
     /**
      * This method parse the Todo task
      * e.g., </code>todo a</code> to <code>[T][✗] a</code>
@@ -23,7 +26,7 @@ public class Parser {
      * @return Nothing
      */
     public static Todo parseTodo(String words) {
-        String name = words.substring(Duke.TODO_CMD_LEN);
+        String name = words.substring(TODO_CMD_LEN);
         Todo task = new Todo(name);
         return task;
     }
@@ -40,7 +43,7 @@ public class Parser {
         detail[0] = detail[0].trim();
         detail[1] = detail[1].trim();
         LocalDate date = LocalDate.parse(detail[1]);
-        Deadline task = new Deadline(detail[0].substring(Duke.DEADLINE_CMD_LEN), date);
+        Deadline task = new Deadline(detail[0].substring(DEADLINE_CMD_LEN), date);
         return task;
     }
 
@@ -56,8 +59,7 @@ public class Parser {
         detail[0] = detail[0].trim();
         detail[1] = detail[1].trim();
         LocalDate date = LocalDate.parse(detail[1]);
-        Event task = new Event(detail[0].substring(Duke.EVENT_CMD_LEN), date);
+        Event task = new Event(detail[0].substring(EVENT_CMD_LEN), date);
         return task;
     }
 }
-

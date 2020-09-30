@@ -36,7 +36,7 @@ public class FindCommand {
         if (index.size() == 0) {
             System.out.println("     Sorry, none of the task descriptions contain" + keyword);
         } else {
-            List(tasks, index);
+            list(tasks, index);
         }
     }
 
@@ -47,7 +47,7 @@ public class FindCommand {
      * @param index  Index of qualified tasks
      * @return Nothing
      */
-    private static void List(ArrayList<Task> tasks, ArrayList<Integer> index) {
+    private static void list(ArrayList<Task> tasks, ArrayList<Integer> index) {
         System.out.println("     Here are the matching tasks in your list:");
         for (int i = 1; i <= index.size(); i++) {
             System.out.print("\n     " + i + ".");
@@ -55,5 +55,3 @@ public class FindCommand {
         }
     }
 }
-
-

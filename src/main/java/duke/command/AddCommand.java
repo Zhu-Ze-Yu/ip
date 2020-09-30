@@ -9,7 +9,7 @@ import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 
 /**
- * AddCommand program add three different types of tasks into taskslist and textslist
+ * AddCommand program adds three different types of tasks into taskslist and textslist
  *
  * @author  Zhu Zeyu
  * @version 1.0

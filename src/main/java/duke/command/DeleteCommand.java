@@ -1,6 +1,5 @@
 package duke.command;
 
-import duke.Duke;
 import duke.task.Task;
 import java.util.ArrayList;
 
@@ -13,6 +12,8 @@ import java.util.ArrayList;
  */
 public class DeleteCommand {
 
+    public static final int DELETE_CMD_LEN = 7;             // length of "delete "
+
     /**
      * This method prints the message of finishing removing one task
      * and remove the task in both taskslist and textslist
@@ -24,8 +25,8 @@ public class DeleteCommand {
      * @return Nothing
      */
     private static void printMessage(ArrayList<Task> tasks, ArrayList<String> texts, int index) {
-        System.out.println("     Noted. I've removed this task:");
         Task t = tasks.get(index - 1);
+        System.out.println("     Noted. I've removed this task:");
         System.out.println("       " + t.toString());
         tasks.remove(index - 1);
         texts.remove(index - 1);
@@ -43,11 +44,11 @@ public class DeleteCommand {
      */
     public static void removeTask(ArrayList<Task> tasks, ArrayList<String> texts, String words) {
         try {
-            String taskIndex = words.substring(Duke.DELETE_CMD_LEN);
+            String taskIndex = words.substring(DELETE_CMD_LEN);
             int index = Integer.parseInt(taskIndex);
             printMessage(tasks, texts, index);
         } catch (IndexOutOfBoundsException e) {
-            System.out.println("     Sorry, I don't know which task you want to remove.");
+            System.out.println("     Sorry, the number of tasks is less than the number you typed, you can list tasks first");
         } catch (NumberFormatException e) {
             System.out.println("     Sorry, there must a number after \"delete\".");
         }

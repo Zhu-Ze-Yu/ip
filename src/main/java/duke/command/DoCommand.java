@@ -1,6 +1,5 @@
 package duke.command;
 
-import duke.Duke;
 import duke.task.Task;
 import java.util.ArrayList;
 
@@ -12,6 +11,8 @@ import java.util.ArrayList;
  * @since   2020-09-11
  */
 public class DoCommand {
+
+    public static final int DONE_CMD_LEN = 5;       // length of "done "
 
     /**
      * This method prints the message of finishing the task
@@ -27,6 +28,7 @@ public class DoCommand {
         Task task = tasks.get(index - 1);
         task.markAsDone();
         String text = texts.get(index - 1);
+        // mark the task in the file also as done (e.g., change 0 to 1)
         text = text.substring(0, 4) + "1" + text.substring(5);
         texts.set(index - 1, text);
         System.out.println("       " + task.toString());
@@ -43,7 +45,7 @@ public class DoCommand {
      */
     public static void doTask(ArrayList<Task> tasks, ArrayList<String> texts, String words) {
         try {
-            String taskIndex = words.substring(Duke.DONE_CMD_LEN);
+            String taskIndex = words.substring(DONE_CMD_LEN);
             int index = Integer.parseInt(taskIndex);
             //mark as done
             printMessage(tasks, texts, index);

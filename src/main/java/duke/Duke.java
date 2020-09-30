@@ -5,10 +5,8 @@ import duke.exception.DukeException;
 import duke.storage.File;
 import duke.task.Task;
 import duke.ui.Ui;
-import java.time.format.DateTimeParseException;
 import java.util.Scanner;
 import java.util.ArrayList;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 
 /**
@@ -27,12 +25,6 @@ import java.io.IOException;
  */
 public class Duke {
 
-    public static final int TODO_CMD_LEN = 5;               // length of "todo "
-    public static final int DEADLINE_CMD_LEN = 9;           // length of "deadline "
-    public static final int EVENT_CMD_LEN = 6;              // length of "event "
-    public static final int DELETE_CMD_LEN = 7;             // length of "delete "
-    public static final int DONE_CMD_LEN = 5;               // length of "done "
-
     /**
      * This method makes use of getFileContents to load tasks from the file
      * and saving tasks in the file by using writeToFile method
@@ -45,24 +37,17 @@ public class Duke {
         ArrayList<Task> tasks = new ArrayList<>();      // store tasks the user is adding
         ArrayList<String> texts = new ArrayList<>();    // store text format of each task
 
-        try {
-            File.getFileContents(File.FILE_PATHWAY, tasks, texts);
-        } catch (FileNotFoundException e) {
-            System.out.println("     File not found");
-            Ui.printLine();
-        } catch (DateTimeParseException e) {
-            System.out.println("     ☹ OOPS!!! The date in the file need to be in the format of yyyy-mm-dd.");
-            Ui.printLine();
-        }
+        File.getFileContents(File.FILE_PATHWAY,tasks, texts);
 
-        String words = " ";
-        while(!words.equals("bye")) {
+        // if the user say bye then exit become true
+        boolean exit = false;
+        while(!exit) {
             Scanner in = new Scanner(System.in);
-            words = in.nextLine();
+            String words = in.nextLine();
             words = words.trim();
             Ui.printLine();
             try {
-                Commands(tasks, texts, words);
+                exit = Commands(tasks, texts, words);
                 File.writeToFile(File.FILE_PATHWAY, texts);
             } catch (DukeException e) {
                 System.out.println("     ☹ OOPS!!! I'm sorry, but I don't know what that means :-(");
@@ -71,8 +56,6 @@ public class Duke {
             }
             Ui.printLine();
         }
-        System.out.println("     Bye. Hope to see you again soon!");
-        Ui.printLine();
     }//end main
 
     /**
@@ -83,7 +66,7 @@ public class Duke {
      * @param words  Words the user typed in
      * @return Nothing
      */
-    public static void Commands(ArrayList<Task> tasks, ArrayList<String> texts, String words) throws DukeException {
+    public static boolean Commands(ArrayList<Task> tasks, ArrayList<String> texts, String words) throws DukeException {
         if (words.equals("list")) {
             ListCommand.listTasks(tasks);
         } else if (words.startsWith("todo")) {
@@ -98,8 +81,14 @@ public class Duke {
             DoCommand.doTask(tasks, texts, words);
         } else if (words.startsWith("find")) {
             FindCommand.findName(tasks, words);
-        } else if (!words.equals("bye")){
+        } else if (words.equals("help")) {
+            HelpCommand.printHelpList();
+        } else if (words.equals("bye")) {
+            Ui.exitMessage();
+            return true;
+        } else {
             throw new DukeException();
         }
+        return false;
     }
 }
