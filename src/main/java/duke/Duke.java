@@ -36,6 +36,8 @@ public class Duke {
         Ui.greetWords();
         ArrayList<Task> tasks = new ArrayList<>();      // store tasks the user is adding
         ArrayList<String> texts = new ArrayList<>();    // store text format of each task
+        ArrayList<Task> backupList = new ArrayList<>(); // store tasks removed by the user
+
 
         File.getFileContents(File.FILE_PATHWAY,tasks, texts);
 
@@ -47,7 +49,7 @@ public class Duke {
             words = words.trim();
             Ui.printLine();
             try {
-                exit = Commands(tasks, texts, words);
+                exit = Commands(tasks, texts, backupList, words);
                 File.writeToFile(File.FILE_PATHWAY, texts);
             } catch (DukeException e) {
                 System.out.println("     ☹ OOPS!!! I'm sorry, but I don't know what that means :-(");
@@ -66,7 +68,11 @@ public class Duke {
      * @param words  Words the user typed in
      * @return Nothing
      */
-    public static boolean Commands(ArrayList<Task> tasks, ArrayList<String> texts, String words) throws DukeException {
+    public static boolean Commands(ArrayList<Task> tasks,
+                                   ArrayList<String> texts,
+                                   ArrayList<Task> backupList,
+                                   String words) throws DukeException {
+
         if (words.equals("list")) {
             ListCommand.listTasks(tasks);
         } else if (words.startsWith("todo")) {
@@ -76,13 +82,21 @@ public class Duke {
         } else if (words.startsWith("event")) {
             AddCommand.addEvent(tasks, texts, words);
         } else if (words.startsWith("delete")) {
-            DeleteCommand.removeTask(tasks, texts, words);
+            DeleteCommand.removeTask(tasks, texts, backupList,words);
         } else if (words.startsWith("done")) {
             DoCommand.doTask(tasks, texts, words);
+        } else if (words.startsWith("undone")) {
+            UndoCommand.undoTask(tasks, texts, words);
         } else if (words.startsWith("find")) {
             FindCommand.findName(tasks, words);
+        } else if (words.equals("group")) {
+            GroupCommand.group(tasks, texts);
+        } else if (words.equals("clear")) {
+            ClearCommand.clear(tasks, texts, backupList);
         } else if (words.equals("help")) {
             HelpCommand.printHelpList();
+        } else if (words.equals("restore")) {
+            RestoreCommand.restore(tasks, texts, backupList);
         } else if (words.equals("bye")) {
             Ui.exitMessage();
             return true;

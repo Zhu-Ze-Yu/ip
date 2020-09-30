@@ -17,6 +17,10 @@ public class Task {
         this.isDone = true;
     }
 
+    public void markAsUndone() {
+        this.isDone = false;
+    }
+
     public String toString() {
         return '[' + this.getStatusIcon() + "] " + this.description;
     }

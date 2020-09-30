@@ -23,7 +23,9 @@ public class DoCommand {
      * @param index  Index of the task user want to finish in the list
      * @return Nothing
      */
-    private static void printMessage(ArrayList<Task> tasks, ArrayList<String> texts, int index) {
+    private static void printMessage(ArrayList<Task> tasks,
+                                     ArrayList<String> texts,
+                                     int index) {
         System.out.println("     Nice! I've marked this task as done:");
         Task task = tasks.get(index - 1);
         task.markAsDone();

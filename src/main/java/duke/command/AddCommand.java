@@ -25,7 +25,7 @@ public class AddCommand {
      * @param amount  Number of tasks in the list currently
      * @return Nothing
      */
-    public static void printMessage(Task t, int amount) {
+    public static void printMessage (Task t, int amount) {
         System.out.println("     Got it. I've added this task:");
         System.out.println("       " + t.toString());
         System.out.println("     Now you have " + amount + " tasks in the list.");
@@ -40,7 +40,7 @@ public class AddCommand {
      * @param words  Words the user typed in
      * @return Nothing
      */
-    public static void addTodo(ArrayList<Task> tasks, ArrayList<String> texts, String words) {
+    public static void addTodo (ArrayList<Task> tasks, ArrayList<String> texts, String words) {
         try {
             Todo task = Parser.parseTodo(words);
             tasks.add(task);
