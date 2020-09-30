@@ -27,6 +27,6 @@ public class RestoreCommand {
             System.out.print("\n     " + i + ".");
             System.out.println(backupList.get(i - 1).toString());
         }
-        System.out.println("     If you want readd these tasks, you need to redo the addcommand");
+        System.out.println("\n     If you want readd these tasks, you need to redo the addcommand");
     }
 }
