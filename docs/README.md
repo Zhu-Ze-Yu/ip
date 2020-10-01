@@ -33,7 +33,7 @@ Expected outcome:
 
 `[T][✘] xxxx(task_name)`
 
-`Now you have # tasks in the list.`
+`Now you have # tasks in the list.`<br>
 
 ### `deadline` - Add Deadline tasks into the list
 This command adds Deadline task into the list, 
@@ -50,7 +50,7 @@ Expected outcome:
 
 `[D][✘] xxxx(task_name) (by: MMM dd yyyy(date))`
 
-`Now you have # tasks in the list.`
+`Now you have # tasks in the list.`<br>
 
 ### `event` - Add Event tasks into the list
 This command adds Event task into the list, 
@@ -67,7 +67,7 @@ Expected outcome:
 
 `[E][✘] xxxx(task_name) (at: MMM dd yyyy(date))`
 
-`Now you have # tasks in the list.`
+`Now you have # tasks in the list.`<br>
 
 ### `done` - mark one task as done
 This command marks the task at position `#(task_index)` as done
@@ -80,7 +80,7 @@ Expected outcome:
 
 `Nice! I've marked this task as done:`
 
-`[T][✓] xxxx(task_name)`
+`[T][✓] xxxx(task_name)`<br>
 
 ### `undone` - mark one task as undone
 This command marks the task at position `#(task_index)` as undone
@@ -93,7 +93,7 @@ Expected outcome:
 
 `Noted! I've marked this task as undone:`
 
-`[T][✘] xxxx(task_name)`
+`[T][✘] xxxx(task_name)`<br>
 
 ### `delete` - delete the task user want to remove
 This command deletes the task at position `#(task_index)`
@@ -108,7 +108,7 @@ Expected outcome:
 
 `[T][✘] xxxx(task_name)`
 
-`Now you have # tasks in the list.`
+`Now you have # tasks in the list.`<br>
 
 ### `find` - find the task with the keyword
 This command finds tasks that contain `keyword`
@@ -125,7 +125,7 @@ Expected outcome:
 
 `2.[T][✘] xxxx(task_name contains keyword)`
 
-`... (omit part)`
+`... (omit part)`<br>
 
 ### `clear` - clear the taskslist
 This command remove all tasks in the list
@@ -136,7 +136,7 @@ Example of usage:
 
 Expected outcome:
 
-`Good job! You have finished all tasks in the list`
+`Good job! You have finished all tasks in the list`<br>
 
 ### `group` - group tasks in the list
 This command group all tasks in Todo-Deadline-Event order.
@@ -167,7 +167,7 @@ Expected outcome after `group` and `list`:
 
 `5.[E][✘] xxxx(task_name) (at: MMM dd yyyy(date))`
 
-`6.[E][✘] xxxx(task_name) (at: MMM dd yyyy(date))`
+`6.[E][✘] xxxx(task_name) (at: MMM dd yyyy(date))`<br>
 
 ### `help` - print help list
 This command prints the help list
@@ -192,7 +192,7 @@ Expected outcome:
 
 `10. restore command: you can list all removed tasks in the backupList by following this format`
 
-`e.g. restore`
+`e.g. restore`<br>
 
 ### `list` - list tasks in the list
 This command list all tasks in the list
@@ -209,7 +209,7 @@ Expected outcome:
 
 `2.[D][✘] xxxx(task_name) (by: MMM dd yyyy(date))`
 
-`3.[E][✘] xxxx(task_name) (at: MMM dd yyyy(date))`
+`3.[E][✘] xxxx(task_name) (at: MMM dd yyyy(date))`<br>
 
 ### `restore` - list deleted tasks 
 This command list all tasks in the backupList which contains all deleted tasks,
@@ -227,7 +227,7 @@ Expected outcome:
 
 `2.[D][✘] xxxx(task_name) (by: MMM dd yyyy(date))`
 
-`3.[E][✘] xxxx(task_name) (at: MMM dd yyyy(date))`
+`3.[E][✘] xxxx(task_name) (at: MMM dd yyyy(date))`<br>
 
 ### `bye` - terminate the program
 This command prints bye message and terminate the program
