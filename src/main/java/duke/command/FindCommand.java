@@ -34,7 +34,7 @@ public class FindCommand {
         }
 
         if (index.size() == 0) {
-            System.out.println("     Sorry, none of the task descriptions contain" + keyword);
+            System.out.println("     Sorry, none of the task descriptions contain " + keyword);
         } else {
             list(tasks, index);
         }

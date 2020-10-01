@@ -17,11 +17,10 @@ public class RestoreCommand {
     /**
      * This method list all removed tasks from the backupList
      *
-     * @param tasks  ArrayList of tasks
-     * @param texts  ArrayList of tasks in the TXT format
+     * @param backupList ArrayList of deleted tasks
      * @return Nothing
      */
-    public static void restore(ArrayList<Task> tasks, ArrayList<String> texts, ArrayList<Task> backupList) {
+    public static void restore(ArrayList<Task> backupList) {
         System.out.println("     Here are all tasks you have removed:");
         for (int i = 1; i <= backupList.size(); i++) {
             System.out.print("\n     " + i + ".");

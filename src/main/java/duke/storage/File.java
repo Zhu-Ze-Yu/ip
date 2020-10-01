@@ -23,7 +23,7 @@ import java.util.Scanner;
  */
 public class File {
 
-    public static final String FILE_PATHWAY = "/Users/zhuzeyu/Desktop/data/task.txt";   // file pathway
+    public static final String FILE_PATHWAY = "src/main/java/duke/file.TXT";   // file pathway
 
     /**
      * This method gets tasks from the file and stores in the list

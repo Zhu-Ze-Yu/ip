@@ -96,7 +96,7 @@ public class Duke {
         } else if (words.equals("help")) {
             HelpCommand.printHelpList();
         } else if (words.equals("restore")) {
-            RestoreCommand.restore(tasks, texts, backupList);
+            RestoreCommand.restore(backupList);
         } else if (words.equals("bye")) {
             Ui.exitMessage();
             return true;
