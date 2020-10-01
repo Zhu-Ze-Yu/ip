@@ -2,7 +2,7 @@ package duke;
 
 import duke.command.*;
 import duke.exception.DukeException;
-import duke.storage.File;
+import duke.storage.Storage;
 import duke.task.Task;
 import duke.ui.Ui;
 import java.util.Scanner;
@@ -37,20 +37,17 @@ public class Duke {
         ArrayList<Task> tasks = new ArrayList<>();      // store tasks the user is adding
         ArrayList<String> texts = new ArrayList<>();    // store text format of each task
         ArrayList<Task> backupList = new ArrayList<>(); // store tasks removed by the user
-
-
-        File.getFileContents(File.FILE_PATHWAY,tasks, texts);
+        Storage.getFileContents(tasks, texts);   // load tasks from file
 
         // if the user say bye then exit become true
         boolean exit = false;
         while(!exit) {
             Scanner in = new Scanner(System.in);
-            String words = in.nextLine();
-            words = words.trim();
+            String words = in.nextLine().trim();
             Ui.printLine();
             try {
-                exit = Commands(tasks, texts, backupList, words);
-                File.writeToFile(File.FILE_PATHWAY, texts);
+                exit = run(tasks, texts, backupList, words);
+                Storage.writeToFile(texts);    // overwrite file
             } catch (DukeException e) {
                 System.out.println("     ☹ OOPS!!! I'm sorry, but I don't know what that means :-(");
             } catch (IOException e) {
@@ -68,40 +65,59 @@ public class Duke {
      * @param words  Words the user typed in
      * @return Nothing
      */
-    public static boolean Commands(ArrayList<Task> tasks,
+    public static boolean run(ArrayList<Task> tasks,
                                    ArrayList<String> texts,
                                    ArrayList<Task> backupList,
                                    String words) throws DukeException {
-
-        if (words.equals("list")) {
-            ListCommand.listTasks(tasks);
-        } else if (words.startsWith("todo")) {
-            AddCommand.addTodo(tasks, texts, words);
-        } else if (words.startsWith("deadline")) {
-            AddCommand.addDeadline(tasks, texts, words);
-        } else if (words.startsWith("event")) {
-            AddCommand.addEvent(tasks, texts, words);
-        } else if (words.startsWith("delete")) {
-            DeleteCommand.removeTask(tasks, texts, backupList,words);
-        } else if (words.startsWith("done")) {
-            DoCommand.doTask(tasks, texts, words);
-        } else if (words.startsWith("undone")) {
-            UndoCommand.undoTask(tasks, texts, words);
-        } else if (words.startsWith("find")) {
-            FindCommand.findName(tasks, words);
-        } else if (words.equals("group")) {
-            GroupCommand.group(tasks, texts);
-        } else if (words.equals("clear")) {
-            ClearCommand.clear(tasks, texts, backupList);
-        } else if (words.equals("help")) {
-            HelpCommand.printHelpList();
-        } else if (words.equals("restore")) {
-            RestoreCommand.restore(backupList);
-        } else if (words.equals("bye")) {
-            Ui.exitMessage();
-            return true;
+        String command;
+        if (words.contains(" ")) {
+            command = words.substring(0, words.indexOf(" "));
         } else {
-            throw new DukeException();
+            command = words;
+        }
+
+        switch (command) {
+            case "list":
+                ListCommand.listTasks(tasks);
+                break;
+            case "todo":
+                AddCommand.addTodo(tasks, texts, words);
+                break;
+            case "deadline":
+                AddCommand.addDeadline(tasks, texts, words);
+                break;
+            case "event":
+                AddCommand.addEvent(tasks, texts, words);
+                break;
+            case "delete":
+                DeleteCommand.removeTask(tasks, texts, backupList,words);
+                break;
+            case "done":
+                DoCommand.doTask(tasks, texts, words);
+                break;
+            case "undone":
+                UndoCommand.undoTask(tasks, texts, words);
+                break;
+            case "find":
+                FindCommand.findName(tasks, words);
+                break;
+            case "group":
+                GroupCommand.group(tasks, texts);
+                break;
+            case "clear":
+                ClearCommand.clear(tasks, texts, backupList);
+                break;
+            case "help":
+                HelpCommand.printHelpList();
+                break;
+            case "restore":
+                RestoreCommand.restore(backupList);
+                break;
+            case "bye":
+                Ui.exitMessage();
+                return true;
+            default:
+                throw new DukeException();
         }
         return false;
     }

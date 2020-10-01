@@ -40,10 +40,10 @@ public class Parser {
      */
     public static Deadline parseDeadline(String words) {
         String[] detail = words.split("/by");
-        detail[0] = detail[0].trim();
-        detail[1] = detail[1].trim();
-        LocalDate date = LocalDate.parse(detail[1]);
-        Deadline task = new Deadline(detail[0].substring(DEADLINE_CMD_LEN), date);
+        String name  = detail[0].trim();
+        String time = detail[1].trim();
+        LocalDate date = LocalDate.parse(time);
+        Deadline task = new Deadline(name.substring(DEADLINE_CMD_LEN), date);
         return task;
     }
 
@@ -56,10 +56,10 @@ public class Parser {
      */
     public static Event parseEvent(String words) {
         String[] detail = words.split("/at");
-        detail[0] = detail[0].trim();
-        detail[1] = detail[1].trim();
-        LocalDate date = LocalDate.parse(detail[1]);
-        Event task = new Event(detail[0].substring(EVENT_CMD_LEN), date);
+        String name = detail[0].trim();
+        String time = detail[1].trim();
+        LocalDate date = LocalDate.parse(time);
+        Event task = new Event(name.substring(EVENT_CMD_LEN), date);
         return task;
     }
 }

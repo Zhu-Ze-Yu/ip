@@ -52,7 +52,7 @@ public class DeleteCommand {
                                   String words) {
         try {
             String taskIndex = words.substring(DELETE_CMD_LEN);
-            int index = Integer.parseInt(taskIndex);
+            int index = Integer.parseInt(taskIndex);    // get index of task user want to remove
             printMessage(tasks, texts, backupList, index);
         } catch (IndexOutOfBoundsException e) {
             System.out.println("     Sorry, the number of tasks is less than the number you typed, you can list tasks first");

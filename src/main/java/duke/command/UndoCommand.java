@@ -29,8 +29,8 @@ public class UndoCommand {
         task.markAsUndone();
         String text = texts.get(index - 1);
         // mark the task in the file also as done (e.g., change 0 to 1)
-        text = text.substring(0, 4) + "0" + text.substring(5);
-        texts.set(index - 1, text);
+        String undoneText = text.substring(0, 4) + "0" + text.substring(5);
+        texts.set(index - 1, undoneText);
         System.out.println("       " + task.toString());
     }
 

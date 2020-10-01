@@ -5,7 +5,7 @@ import duke.task.Event;
 import duke.task.Task;
 import duke.task.Todo;
 import duke.ui.Ui;
-
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -21,24 +21,21 @@ import java.util.Scanner;
  * @version 1.0
  * @since   2020-08-21
  */
-public class File {
+public class Storage {
 
-    public static final String FILE_PATHWAY = "src/main/java/duke/file.TXT";   // file pathway
+    public static final String FILE_PATHWAY = "task.txt";   // file pathway
 
     /**
      * This method gets tasks from the file and stores in the list
      *
-     * @param filePath  the path way for the file
      * @param tasks  ArrayList of tasks
      * @param texts  ArrayList of tasks in the TXT format
      * @return Nothing
      */
-    public static void getFileContents(java.lang.String filePath,
-                                       java.util.ArrayList<duke.task.Task> tasks,
-                                       java.util.ArrayList<java.lang.String> texts) {
+    public static void getFileContents(ArrayList<Task> tasks, ArrayList<String> texts) {
         try {
-            java.io.File f = new java.io.File(filePath); // create a File for the given file path
-            Scanner s = new Scanner(f);                  // create a Scanner using the File as the source
+            File f = new File(FILE_PATHWAY);    // create a File for the given file path
+            Scanner s = new Scanner(f);     // create a Scanner using the File as the source
             while(s.hasNext()) {
                 String words = s.nextLine();
                 texts.add(words);
@@ -46,7 +43,7 @@ public class File {
                 storeTask(tasks, detail);
             }
         } catch (FileNotFoundException e) {
-            System.out.println("     File not found");
+            System.out.println("     File not found or you can create a txt file in your own computer and change file path");
             Ui.printLine();
         } catch (DateTimeParseException e) {
             System.out.println("     ☹ OOPS!!! Can you change dates of tasks to be yyyy-mm-dd format.");
@@ -92,12 +89,11 @@ public class File {
     /**
      * This method overwrites the file using the text list
      *
-     * @param filePath  the path way for the file
      * @param texts  ArrayList of tasks in the TXT format
      * @return Nothing
      */
-    public static void writeToFile(String filePath, ArrayList<String> texts) throws IOException {
-        FileWriter fw = new FileWriter(filePath);
+    public static void writeToFile(ArrayList<String> texts) throws IOException {
+        FileWriter fw = new FileWriter(FILE_PATHWAY);
         for (String text : texts) {
             fw.write(text + "\n");
         }

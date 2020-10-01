@@ -16,7 +16,9 @@ public class Ui {
      */
     public static void printLine() {
         System.out.print("     -");
-        for (int i = 0; i < 100; i++) System.out.print('-');
+        for (int i = 0; i < 100; i++) {
+            System.out.print('-');
+        }
         System.out.println("-");
     }
 
